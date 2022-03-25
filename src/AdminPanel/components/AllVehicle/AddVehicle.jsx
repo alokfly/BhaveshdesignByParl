@@ -59,42 +59,39 @@ span{
 const AddVehicle = () => {
     const navigate = useNavigate();
 
-    const [vichleNumber,setVichleNumber] = useState("");
-    const [name,setName] = useState ("");
-    const [vichleType,setVichleType] =useState("")
-    const [phoneNumber,setPhoneNumber] = useState("")
-    const token = localStorage.getItem("token");
-    console.log(token)
+    //api integration
 
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMjlmMzExZTZlY2I3NTllZWI4ODY2NiIsInNjb3BlIjoibG9naW4iLCJpYXQiOjE2NDcyNDY3MDksImV4cCI6MTY0OTgzODcwOX0.7T0tBbRjPdyFc0Mmo53l_D-enLW7IrKu_TafNIPj6SU'
+    // const token = (localStorage.getItem('token'))
 
-    const Addvchl = () => {
-        try{
-        let url = "https://we-fast-flyweis.herokuapp.com/vehicle"
+    let url = "https://we-fast-flyweis.herokuapp.com/vehicle"
 
-        const config = {
-            headers: { Authorization: `Bearer${token}` }
-        };
+    const [name, setName] = useState('')
+    const [vehicleType, setVichleType] = useState('')
+    const [vehicleNumber, setvehicleNumber] = useState('')
+    const [phoneNumber, setphoneNumber] = useState('')
 
         let temp = {
-            vehicleNumber:vichleNumber,
-            name:name,
-            vehicleType:vichleType,
-            phone_number:phoneNumber
-        };
+            vehicleNumber : vehicleNumber,
+            name : name,
+            vehicleType : vehicleType,
+            phone_number : phoneNumber,
+        }
 
-        
-
-        console.log(config)
-
-        axios
-        .post(url,config,temp)
-        .then(
-            (res) => {
-            console.log("data response::",res)
+    const HandleAddVehicle = (e) =>{
+        const config = {
+            headers : {"Authorization" : `Bearer ${token}`}
+        }
+        axios.post(url,temp,config).then(res=>{
+            console.log("my data",res)
+        }).catch(err=>{
+            console.log("error",err)
         })
-        }catch (error) {}
-
     }
+
+
+   
+    
 
   return (
     <>
@@ -122,9 +119,9 @@ const AddVehicle = () => {
             <Inputs>
             <TextField  label="vehicleNumber"
                     id="outlined-size-small"
-                    value={vichleNumber}
+                    value={vehicleNumber}
                     onChange={(e)  => {
-                        setVichleNumber(e.target.value)
+                        setvehicleNumber(e.target.value)
                     }}
                    
                     size="small"
@@ -133,7 +130,7 @@ const AddVehicle = () => {
             <Inputs>
             <TextField  label="vehicleType"
                     id="outlined-size-small"
-                   value={vichleType}
+                   value={vehicleType}
                    onChange={(e)=>{
                        setVichleType(e.target.value)
                    }}
@@ -147,7 +144,7 @@ const AddVehicle = () => {
                     id="outlined-size-small"
                    value={phoneNumber}
                    onChange={(e) =>{
-                       setPhoneNumber(e.target.value)
+                       setphoneNumber(e.target.value)
                    }}
                     size="small"
                     margin='dense'
@@ -155,7 +152,7 @@ const AddVehicle = () => {
                     />
             </Inputs>
 
-            <button onClick={ Addvchl }>Save</button>
+            <button onClick={HandleAddVehicle}>Save</button>
 
         </MainCategories>  
     </ContainerS>

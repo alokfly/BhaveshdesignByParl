@@ -1,10 +1,9 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState} from 'react'
 import { ContainerS } from '../../Common/CommonStyling'
 import HOC from '../../Common/HOC'
 import styled from 'styled-components'
-import { Checkbox, FormControlLabel, TextField } from '@mui/material'
-import { Label } from '@material-ui/icons'
-import { useNavigate } from 'react-router'
+import {  TextField } from '@mui/material'
+
 import axios from 'axios'
 
 const MainCategories = styled.div`
@@ -31,43 +30,50 @@ const Inputs = styled.div`
     width: 50%;
 
 `
-const CheckBoxs = styled.div`
-    width: 50%;
-    display: flex;
-    align-items: center;
-`
+
 
 const AddVehicleType = () => {
-    const navigate = useNavigate();
+    
+    //api call
 
+    const token = (localStorage.getItem('token')) //fst step
 
+    let url = "https://we-fast-flyweis.herokuapp.com/vehicle-type/" //2nd step
+
+    //3rd step
     const [vehiclename,setvehiclename] = useState("");
     const [loadWeight,setloadWeight] = useState ("");
     const [baseFare,setbaseFare] =useState("")
     const [pricePerKm,setpricePerKm] = useState("")
     const [pricePerMin,setpricePerMin] = useState("")
 
-    const AddVType = () => {
-        try{
-        let url = "https://we-fast-flyweis.herokuapp.com/vehicle-type"
+    //4th step
+     let temp ={
 
-        let temp = {
-            vehiclename:vehiclename,
-            loadWeight:loadWeight,
-            baseFare:baseFare,
-            pricePerKm:pricePerKm,
-            pricePerMin:pricePerMin
-        };
+        name : vehiclename,
+        loadWeight : loadWeight,
+        baseFare : baseFare,
+        pricePerKm : pricePerKm,
+        pricePerMin : pricePerMin,
 
-        axios
-        .post(url,temp)
-        .then(
-            (res) => {
-            console.log("data response::",res)
-        })
-        }catch (error) {
-            console.log('Error::',error)
+    }
+
+    //5th step main api call 
+
+    const AddVType = (e)=>{
+        //1st step inside api call
+
+        const config = {
+            headers : {"Authorization" : `Bearer ${token}`}
         }
+
+        console.log(config)
+        axios.post(url,temp,config).then(res=>{
+            console.log('sucess:::',res)
+        }).catch(err=>{
+            console.log("error",err)
+        })
+
     }
 
   return (

@@ -1,12 +1,5 @@
-// vehicleNumber": "DL454545",
-//     "name": "node3",
-//     "vehicleType": "622eee141dafbdc9c3728778",
-//     "phone_number": "9650982901"
 
-
-
-import { border } from '@mui/system'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {useNavigate} from 'react-router'
 
 
@@ -19,6 +12,7 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
+import axios from 'axios'
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -69,56 +63,50 @@ let style = {
 
 const VendorList = () => {
 
-  const [Editname, setEditname] = React.useState("");
+  //api
+
+  const token = (localStorage.getItem('token'))
+
+  let url = "https://we-fast-flyweis.herokuapp.com/vehicle/all"
+  const [data, setdata] = useState([]);
+
+
+
+  const Auth = {
+    headers: {"Authorization" : `Bearer ${token}`}
+  }
+
+  const AllVehicle = async () =>{
+   
+    try{
+      
+    const res = await axios.get(url,Auth)
+    setdata(res.data.data.vehicles)
+    console.log('mydata::::::',res.data.data.vehicles)
+
+    }catch(e){
+      console.log('all error::::',e)
+    }
+
+  }
+
+  const Delete = async ()=>{
+    const res = await axios.delete(url,Auth)
+    setdata(res.data.data.vehicles)
+
+  }
+
+  useEffect(()=>{
+
+    AllVehicle();
+    Delete();
+
+  },[])
+
+
+
+ 
   const [Editid, setEditid] = React.useState("");
-
-
-  const updtedata = () => {
-    data[Editid].status = Editname;
-    setOpen(false);
-    setdata([... data])
-}
-
-
-        const[ data, setdata] = React.useState([
-          {
-            id : '1',
-            userName : 'BMW',
-            mno : '+91748499383',
-            vehicleType : 'Sports',
-            vNumber: '345678290B'
-
-
-          },
-          {
-            id : '2',
-            userName : 'Land Rover Discovery Sport',
-            mno : '+91748499383',
-            vehicleType : 'SUV',
-            vNumber: '345678290B'
-
-
-          },
-          {
-            id : '3',
-            userName : 'Maruti Suzuki Swift',
-            mno : '+91748499383',
-            vehicleType : 'Hatchback',
-            vNumber: '345678290B'
-
-
-          },
-          {
-            id : '4',
-            userName : 'Audi',
-            mno : '+91748499383',
-            vehicleType : 'Sports',
-            vNumber: '345678290B'
-
-
-          },
-
-        ])
 
    
       const [open, setOpen] = React.useState(false);
@@ -135,14 +123,13 @@ const VendorList = () => {
 
   return (
     <>
-          <table class="table">
+      <table class="table">
 
-            {/* <------------header----------------> */}
+        e{/* <-------header- */}
       <thead class="thead-dark">
         <tr>
           <th scope="col">#</th>
-          {/* <th scope="col">Images</th> */}
-          
+      
           <th scope="col">Name</th>
           <th scope="col">vehicleNumber</th>
           <th scope="col">vehicleType</th>
@@ -157,14 +144,15 @@ const VendorList = () => {
 
         <tr key={item.id}>
           <th scope="row">{item.id} </th>
-          <td>{item.userName}</td>
-          <td>{item.vNumber}</td>
+          <td>{item.name}</td>
+          <td>{item.vehicleNumber}</td>
           <td>{item.vehicleType}</td>
           <td>{item.mno} </td>
           <td>
             <button onClick={handleClickOpen} style={{border: 'none', cursor : 'pointer',backgroundColor: '#10b0ef', color:'#fff' }}>View</button>
             <button onClick={()=>navigate('/edit-vehicle',{state:item})} style={{margin : '0 10px',border: 'none', cursor : 'pointer',backgroundColor: '#54ef9c', color:'#fff' }}>Edit</button>
-            <button style={{border: 'none', cursor : 'pointer',backgroundColor: 'red', color:'#fff' }}>delete</button>
+     
+            {/* <button style={{border: 'none', cursor : 'pointer',backgroundColor: 'red', color:'#fff' }}>delete</button> */}
           </td>
         </tr>
         ))}

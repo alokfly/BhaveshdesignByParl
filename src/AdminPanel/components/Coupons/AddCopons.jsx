@@ -67,38 +67,53 @@ const AddCoupons = () => {
     // (Math.random() + 1).toString(36).substring(7)
     
     const [id, setid] = useState('')
-    const random =()=>{
+    const random =(e)=>{
         setid(uniqueId)
 
     }
-        // ----------------------api---------------------
+    // ----------------------api---------------------
+    const token = (localStorage.getItem('token'))  //1st
+    console.log(token)
+
+    let url = 'https://we-fast-flyweis.herokuapp.com/coupon' //2nd
+
+
+    //3rd 
     const [couponCode,setcouponCode] = useState ("");
     const [discountPercentage,setdiscountPercentage] =useState("")
     const [validFrom,setvalidFrom] =useState("")
     const [validTill,setvalidTill] =useState("")
-   
 
-    const handleAdd = () => {
-        try{
-        let url = "https://we-fast-flyweis.herokuapp.com/coupon"
-
-        let temp = {
-            couponCode : couponCode,
-            discountPercentage :discountPercentage,
-            validFrom : validFrom,
-            validTill : validTill
-
-        };
-
-        axios
-        .post(url,temp)
-        .then(
-            (res) => {
-            console.log("data response::",res)
-        })
-        }catch (error) {}
+    //4th
+    let temp = {
+        couponCode:id,
+        discountPercentage,
+        validFrom,
+        validTill
 
     }
+   
+    //5th
+    const handleAdd = (e) => {
+
+        //clear after submit
+        setcouponCode('')
+        setdiscountPercentage('')
+        setvalidFrom("")
+        setvalidTill("")
+
+        //1st authontication
+        const config = {
+            headers : {"Authorization" : `Bearer ${token}`}
+        }
+        console.log(config)
+        axios.post(url,temp,config).then(res=>{
+            console.log('sucess:::',res)
+        }).catch(err=>{
+            console.log("error",err)
+        })
+    }
+
 
   return (
     <>
@@ -124,6 +139,7 @@ const AddCoupons = () => {
                     margin='dense' />
                     <button onClick={random}>Generate Coupon</button>
             </Inputs>
+
             <Inputs>
             <TextField  label="Discount Percentage"
                     id="outlined-size-small"
@@ -132,10 +148,11 @@ const AddCoupons = () => {
                     onChange={(e)  => {
                         setdiscountPercentage(e.target.value)
                     }}
-                   
+
                     size="small"
                     margin='dense'/>
             </Inputs>
+
             <Inputs>
             <span>Valid From</span>
             <TextField
@@ -145,32 +162,26 @@ const AddCoupons = () => {
                     onChange={(e)  => {
                         setvalidFrom(e.target.value)
                     }}
-                    type ='datetime-local'
-                   
+                    type ='datetime-local'                  
                     size="small"
                     margin='dense'/>
             </Inputs>
+            
             <Inputs>
             <span>Valid Till</span>
             <TextField
                      label="mm/dd/yyyy"
-                    inputFormat="MM/dd/yyyy"
-                 
+                    inputFormat="MM/dd/yyyy"                
                     id="outlined-size-small"
                     value={validTill}
                     onChange={(e)  => {
                         setvalidTill(e.target.value)
                     }}
-                    type='datetime-local'
-                   
+                    type='datetime-local'                  
                     size="small"
                     margin='dense'/>
             </Inputs>
-        
-           
-
             <button onClick={ handleAdd }>Save</button>
-
         </MainCategories>  
     </ContainerS>
     </>

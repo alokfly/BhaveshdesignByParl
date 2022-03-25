@@ -1,5 +1,5 @@
 import { border } from '@mui/system'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {useNavigate} from 'react-router'
 
 
@@ -12,6 +12,7 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
+import axios from 'axios';
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -62,110 +63,52 @@ let style = {
 
 const CouponList = () => {
 
-  const [Editname, setEditname] = React.useState("");
-  const [Editid, setEditid] = React.useState("");
 
+  //api -integrations get data
 
-  const updtedata = () => {
-    data[Editid].status = Editname;
-    setOpen(false);
-    setdata([... data])
-}
+  const url = 'https://we-fast-flyweis.herokuapp.com/coupon/all'
 
+  const token = (localStorage.getItem('token'))
+  const [data, setdata] = useState([])
 
-        const[ data, setdata] = React.useState([
-          {
-            id : '1',
-            code : '67DF6',
-            discount: '20',
-            from : '20-03-2022 02:00PM',
-            to: '27-03-2022 01:59PM',
-          
-          },
-          {
-            id : '2',
-            code : '67DF6',
-            discount: '20',
-            from : '20-03-2022 02:00PM',
-            to: '27-03-2022 01:59PM',
-          
-          },
-          {
-            id : '3',
-            code : '67DF6',
-            discount: '20',
-            from : '20-03-2022 02:00PM',
-            to: '27-03-2022 01:59PM',
-          
-          },
-          {
-            id : '4',
-            code : '67DF6',
-            discount: '20',
-            from : '20-03-2022 02:00PM',
-            to: '27-03-2022 01:59PM',
-          
-          },
-          {
-            id : '5',
-            code : '67DF6',
-            discount: '20',
-            from : '20-03-2022 02:00PM',
-            to: '27-03-2022 01:59PM',
-          
-          },
-          {
-            id : '6',
-            code : '67DF6',
-            discount: '20',
-            from : '20-03-2022 02:00PM',
-            to: '27-03-2022 01:59PM',
-          
-          },
-          {
-            id : '7',
-            code : '67DF6',
-            discount: '20',
-            from : '20-03-2022 02:00PM',
-            to: '27-03-2022 01:59PM',
-          
-          },
-          {
-            id : '8',
-            code : '67DF6',
-            discount: '20',
-            from : '20-03-2022 02:00PM',
-            to: '27-03-2022 01:59PM',
-          
-          },
-          {
-            id : '9',
-            code : '67DF6',
-            discount: '20',
-            from : '20-03-2022 02:00PM',
-            to: '27-03-2022 01:59PM',
-          
-          },
-          {
-            id : '10',
-            code : '67DF6',
-            discount: '20',
-            from : '20-03-2022 02:00PM',
-            to: '27-03-2022 01:59PM',
-          
-          },
-          {
-            id : '11',
-            code : '67DF6',
-            discount: '20',
-            from : '20-03-2022 02:00PM',
-            to: '27-03-2022 01:59PM',
-          
-          },
-       
+  let config = {
+    headers: {"Authorization" : `Bearer ${token}`}
+  }
+
+  const GetCoupons = async ()=>{
+  
+
+    try{ 
+      const data = await axios.get(url,config)
+      console.log('mydata::',data.data.data.coupons)
+      setdata(data.data.data.coupons)
+
+    }catch(e){
+      console.log("lol error::",e)
+    }
     
- 
-        ])
+  }
+
+  // delete data from database
+
+  const handleDelete = async (id)=>{
+
+   try{
+      const res = await axios.delete("https://we-fast-flyweis.herokuapp.com/coupon/"+id,config)
+      console.log("delete::",res)
+      GetCoupons();
+    }catch(e){
+      console.log("All error:::",e)
+    }
+
+  }
+
+  useEffect(()=>{
+    GetCoupons();
+
+  },[])
+
+
 
    
       const [open, setOpen] = React.useState(false);
@@ -187,9 +130,7 @@ const CouponList = () => {
             {/* <------------header----------------> */}
       <thead class="thead-dark">
         <tr>
-          <th scope="col">#</th>
-          {/* <th scope="col">Images</th> */}
-          
+         
           <th scope="col">Coupon Code</th>
           <th scope="col">Total Discount</th>
           <th scope="col">Valid From</th>
@@ -204,16 +145,16 @@ const CouponList = () => {
         {data.map((item)=>(
 
         <tr key={item.id}>
-          <th scope="row">{item.id} </th>
-          <td>{item.code}</td>
-          <td>{item.discount}%</td>
-          <td>{item.from}</td>
+        
+          <td>{item.couponCode}</td>
+          <td>{item.discountPercentage}%</td>
+          <td>{item.validFrom}</td>
     
-          <td>{item.to} </td>
+          <td>{item.validTill} </td>
           <td>
             {/* <button onClick={handleClickOpen} style={{border: 'none', cursor : 'pointer',backgroundColor: '#10b0ef', color:'#fff' }}>View</button> */}
             <button onClick={()=>navigate('/edit-coupons',{state:item})} style={{margin : '0 10px',border: 'none', cursor : 'pointer',backgroundColor: '#54ef9c', color:'#fff' }}>Edit</button>
-            <button style={{border: 'none', cursor : 'pointer',backgroundColor: 'red', color:'#fff' }}>delete</button>
+            <button onClick={()=>handleDelete(item.id)} style={{border: 'none', cursor : 'pointer',backgroundColor: 'red', color:'#fff' }}>delete</button>
           </td>
         </tr>
         ))}

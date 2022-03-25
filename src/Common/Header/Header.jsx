@@ -119,9 +119,9 @@ const Header = (props) => {
                                 Product
                             </span>
 
-                            <span className="logout_Pointer_cursor mt-2" onClick={() => navigate("/all-order")}>
+                            {/* <span className="logout_Pointer_cursor mt-2" onClick={() => navigate("/all-order")}>
                                Order
-                            </span>
+                            </span> */}
 
                             <span className="logout_Pointer_cursor mt-2" onClick={() => navigate("/categories")}>
                                 Categories
@@ -142,9 +142,9 @@ const Header = (props) => {
                                 Change Password
                             </span>
 
-                            <span className="logout_Pointer_cursor mt-2" onClick={() => navigate("/")}>
+                            {/* <span className="logout_Pointer_cursor mt-2" onClick={() => navigate("/")}>
                                 Log Out
-                            </span>
+                            </span> */}
 
                         </div>
                     </div>

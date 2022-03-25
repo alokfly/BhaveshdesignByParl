@@ -19,11 +19,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./Sidebar.css";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Sidebar = (props) => {
 
-    const removeToken = (userToken) => {
+    const removeToken = (token) => {
         localStorage.clear();     
     };
 
@@ -34,8 +34,8 @@ const Sidebar = (props) => {
                 <ProSidebar collapsed={props.isloading}>
                     <Menu iconShape="circle">
                     {/* <MenuItem onClick={() => navigate("/dashbord")}>Dashboard</MenuItem> */}
-                    <MenuItem title="User Information" onClick={() => navigate("/dashbord")} icon={<DashboardTwoToneIcon />}>Dashboard</MenuItem>
-                    <MenuItem title="User Information" onClick={() => navigate("/uers")} icon={<SupervisedUserCircleIcon />}>Users Information</MenuItem>
+                    <MenuItem title="DashBord" onClick={() => navigate("/dashbord")} icon={<DashboardTwoToneIcon />}>Dashboard</MenuItem>
+                    {/* <MenuItem title="User Information" onClick={() => navigate("/uers")} icon={<SupervisedUserCircleIcon />}>Users Information</MenuItem> */}
                     <MenuItem title="Driver Information" onClick={() => navigate("/vendor")} icon={<AirlineSeatLegroomReducedTwoToneIcon />}>Driver Information</MenuItem>                         
                      <MenuItem title="Notifaction" icon={<NotificationsActiveOutlinedIcon />} onClick={() => navigate("/admin-notificatin")}>Push-Notifaction</MenuItem>                          
                      <MenuItem title="goodstype" icon={<ArchiveOutlinedIcon />} onClick={() => navigate("/goodsType")}>Goods Type</MenuItem>                          
@@ -48,8 +48,10 @@ const Sidebar = (props) => {
                      <SubMenu title="Setting" icon={<SettingsOutlinedIcon />}>
     
                             <MenuItem onClick={() => navigate("/admin-profile")}>Profile Settings</MenuItem>
-                            <MenuItem onClick={() => navigate("/")}>Logout</MenuItem>                
-                            {/* <MenuItem onClick={removeToken}>Logout</MenuItem>                 */}
+                        <Link to='/'>
+                                 <MenuItem onClick={removeToken}>Logout</MenuItem> 
+                        </Link>
+                          
                     </SubMenu>
                     </Menu>
                 </ProSidebar>

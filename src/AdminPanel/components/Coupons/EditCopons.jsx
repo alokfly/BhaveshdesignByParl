@@ -62,44 +62,50 @@ const EditCopons = () => {
 
     const location = useLocation();
     const code = location.state.code
-    const discount = location.state.discount
-    const from = location.state.from
-    const to = location.state.to
+    const discount = location.state.discountPercentage
+    const from = location.state.validFrom
+    const to = location.state.validTill
+    const id = location.state.id
 
-    console.log('location::::::::::',from)
 
-  
+    console.log('location::::::::::',location.state)
 
     const navigate = useNavigate();
     // const uniqueId = parseInt(Date.now() * Math.random());
     const uniqueId = (Math.random() + 1).toString(36).substring(7);
-        // ----------------------api---------------------
+
+    //----api---->
    
     const [discountPercentage,setdiscountPercentage] =useState(discount)
     const [validFrom,setvalidFrom] =useState(from)
     const [validTill,setvalidTill] =useState(to)
+    const [userId,setuserId] =useState(id)
+    let url = "https://we-fast-flyweis.herokuapp.com/coupon/${userId}"
+    
+    const token = (localStorage.getItem('token'))
+
    
 
-    const handleAdd = () => {
+    const handleUpdate = async () => {
+
+        const Auth = {
+            headers: {"Authorization": `Bearer ${token}`}
+        }
         try{
-        let url = "https://we-fast-flyweis.herokuapp.com/coupon/${id}"
 
         let temp = {
-        
             discountPercentage :discountPercentage,
             validFrom : validFrom,
             validTill : validTill
-
         };
-
-        axios
-        .post(url,temp)
+      await axios.put(`https://we-fast-flyweis.herokuapp.com/coupon/${userId}`,temp,Auth)
         .then(
             (res) => {
             console.log("data response::",res)
         })
-        }catch (error) {}
-
+        }catch (error) {
+            console.log("my error",error)
+        }
     }
 
   return (
@@ -163,7 +169,7 @@ const EditCopons = () => {
         
            
 
-            <button onClick={ handleAdd }>Save</button>
+            <button onClick={ handleUpdate }>Save</button>
 
         </MainCategories>  
     </ContainerS>

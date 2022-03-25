@@ -54,9 +54,9 @@ const EditDriver = () => {
 
   const location = useLocation();
 
-  const name = location.state.userName
-  const mno = location.state.mno
-  const img = location.state.img
+  const name = location.state.name
+  const mno = location.state.phoneNumber
+  const img = location.state.profileImage
 
 
   return (

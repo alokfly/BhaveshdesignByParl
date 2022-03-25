@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ContainerS } from '../../../Common/CommonStyling'
 import HOC from '../../Common/HOC'
 import styled from 'styled-components'
@@ -39,6 +39,9 @@ const Header = styled.div`
 `
 
 const VehicleType = () => {
+
+
+
 
     const navigate = useNavigate();
   return (

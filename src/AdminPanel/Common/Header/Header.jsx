@@ -8,11 +8,18 @@ import sikhlo2 from "../../Image/shopping.jpg"
 
 //css file
 import "./Header.css";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Header = (props) => {
     const navigate = useNavigate();
     console.log("header props", props)
+
+    const removeToken = (token) => {
+        localStorage.clear();     
+    };
+
+
+
 
     /*local state */
     const [Sidebar, setSidebar] = useState(false);
@@ -28,6 +35,7 @@ const Header = (props) => {
         document.getElementById("mySidenav").style.width = "0px";
         setSidebar(false)
     }
+
     return (
         <div className="topheader">
             <AppBar position="fixed" className="MainHeader">
@@ -53,38 +61,24 @@ const Header = (props) => {
                               <input form='form-control ' type="pcaceholder" placeholder='Search...'/><i className="fa fa-search search_barclass" ></i>
                             </div>
                             </div>
-                            {/* <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="calendar">
-                            <div  className='pr-4 '>
-                           
-                            <i class="fa fa-calendar calander"></i>
-                            </div>
-                            </span> */}
-
-                            {/* <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Chat"> */}
-                            {/* <div  className='pr-4 '>
-                           
-                            <i class="fa fa-whatsapp whatapp_header"></i>
-                            </div> */}
-                            {/* <div  className='pr-4 '>
-                            <i class="fa fa-power-off" aria-hidden="true"></i>
-                            </div> */}
-                            {/* </span> */}
-
+            
                            
                           
 
                             <div className="dropdown " style={{cursor: 'pointer'}}>
                                 <div data-toggle="dropdown">  <i className="fa fa-power-off mt-2" style={{fontSize:"23px"}} aria-hidden="true"></i>
                                 </div>
-                                <div className="dropdown-menu animate slideIn dopdown_formatting">
+9<div className="dropdown-menu animate slideIn dopdown_formatting">
                                     <div className="dropdownLinks p-2" onClick={() => navigate("/")}>
                                         <span><i className="fa fa-cog mr-3" />Change Password</span>
                                     </div>
                                     <hr />
-                                    <div className="dropdownLinks p-2 mt-1" onClick={() => navigate("/")}>
-                                        <span><i className="fa fa-sign-out mr-3" />LogOut</span>
+                                    <Link to='/'>
+                                    <div className="dropdownLinks p-2 mt-1" onClick={() => localStorage.clear()} style={{textDecoration: 'none',}}>
+                                        <span ><i className="fa fa-sign-out mr-3" />LogOut</span>
                                     </div>
-
+                                    </Link>
+                                    
                                 </div>
                             </div>
                         </span>
@@ -150,9 +144,11 @@ const Header = (props) => {
                                 Change Password
                             </span>
 
-                            <span className="logout_Pointer_cursor mt-2" onClick={() => navigate("/")}>
+                            <Link to='/'>
+                            <span className="logout_Pointer_cursor mt-2" onClick={()=>localStorage.clear() }>
                                 Log Out
                             </span>
+                            </Link>
 
                         </div>
                     </div>

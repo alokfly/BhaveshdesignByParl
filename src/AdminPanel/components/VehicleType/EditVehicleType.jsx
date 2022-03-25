@@ -1,10 +1,9 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState} from 'react'
 import { ContainerS } from '../../Common/CommonStyling'
 import HOC from '../../Common/HOC'
 import styled from 'styled-components'
-import { Checkbox, FormControlLabel, TextField } from '@mui/material'
-import { Label } from '@material-ui/icons'
-import { useLocation, useNavigate } from 'react-router'
+import { TextField } from '@mui/material'
+import { useLocation} from 'react-router'
 import axios from 'axios'
 
 const MainCategories = styled.div`
@@ -31,15 +30,10 @@ const Inputs = styled.div`
     width: 50%;
 
 `
-const CheckBoxs = styled.div`
-    width: 50%;
-    display: flex;
-    align-items: center;
-`
+
 
 const EditVehicleType = () => {
 
-    const navigate = useNavigate();
     const location = useLocation();
     console.log('location:::',location.state)
     const name = location.state.name
@@ -47,18 +41,28 @@ const EditVehicleType = () => {
     const baseFares = location.state.baseFare
     const pricePerKms = location.state.pricePerKm
     const pricePerMins = location.state.pricePerMin
+    const id = location.state._id
 
 
+
+
+
+    const [userID,setuserID] = useState(id);
     const [vehiclename,setvehiclename] = useState(name);
-    const [loadWeight,setloadWeight] = useState (loadWeights);
-    const [baseFare,setbaseFare] =useState(baseFares)
-    const [pricePerKm,setpricePerKm] = useState(pricePerKms)
-    const [pricePerMin,setpricePerMin] = useState(pricePerMins)
-    
+    const [loadWeight,setloadWeight] = useState ('');
+    const [baseFare,setbaseFare] =useState('')
+    const [pricePerKm,setpricePerKm] = useState('')
+    const [pricePerMin,setpricePerMin] = useState('')
 
-    const AddVType = () => {
-        try{
-        let url = "https://we-fast-flyweis.herokuapp.com/vehicle-type"
+
+    const token = (localStorage.getItem('token'))
+
+    const EditVehicleTye = async () => {
+
+        const Auth = {
+            headers : {"Authorization" : `Bearer ${token}`}
+        }
+
 
         let temp = {
             vehiclename:vehiclename,
@@ -68,8 +72,12 @@ const EditVehicleType = () => {
             pricePerMin:pricePerMin
         };
 
+        try{
+
+
+        await
         axios
-        .post(url,temp)
+        .put(`https://we-fast-flyweis.herokuapp.com/vehicle-type/${userID}`,temp,Auth)
         .then(
             (res) => {
             console.log("data response::",res)
@@ -145,7 +153,7 @@ const EditVehicleType = () => {
                     />
             </Inputs>
 
-            <button onClick={ AddVType }>Save</button>
+            <button onClick={ EditVehicleTye }>Update</button>
 
         </MainCategories>  
     </ContainerS>

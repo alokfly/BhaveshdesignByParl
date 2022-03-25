@@ -3,7 +3,7 @@ import { ContainerS } from '../../Common/CommonStyling'
 import HOC from '../../Common/HOC'
 import styled from 'styled-components'
 import { TextField } from '@mui/material'
-import { useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 import axios from 'axios'
 
 const MainCategories = styled.div`
@@ -57,30 +57,39 @@ span{
 `
 const EditGoods = () => {
     const navigate = useNavigate();
+    const location = useLocation();
 
-   
-    const [name,setName] = useState ("");
-    const [description,setdescription] =useState("")
-   
 
-    const handleAdd = () => {
-        try{
-        let url = "https://we-fast-flyweis.herokuapp.com/goods-type"
+    const id = location.state.id;
+    const nms = location.state.name;
+    const des = location.state.description;
+    // const id = location.state
+    console.log('my idd::->',location.state)
+
+    const [userID, setuserID] = useState(id)
+    const [name,setName] = useState (nms);
+    const [description,setdescription] =useState(des)
+    const token = (localStorage.getItem('token'))
+
+    const config = {
+        headers : {"Authorization" : `Bearer ${token}`}
+    }
+   
+    //update api
+    const handleUpdate = async () => {
 
         let temp = {
             description:description,
             name:name,
-          
+            // id:userID,        
         };
 
-        axios
-        .post(url,temp)
-        .then(
-            (res) => {
-            console.log("data response::",res)
-        })
-        }catch (error) {}
-
+        await axios.put(`https://we-fast-flyweis.herokuapp.com/goods-type/${userID}`,temp,config).then(res=>{
+        console.log('respnse',res)
+        }).catch(e=>{
+                    console.log("error",e)
+                })             
+        console.log(description,name)
     }
 
   return (
@@ -119,7 +128,7 @@ const EditGoods = () => {
             </Inputs>
            
 
-            <button onClick={ handleAdd }>Save</button>
+            <button onClick={ handleUpdate }>Save</button>
 
         </MainCategories>  
     </ContainerS>

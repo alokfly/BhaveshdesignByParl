@@ -1,8 +1,6 @@
-import { border } from '@mui/system'
-import React from 'react'
+
+import React, { useEffect, useState } from 'react'
 import {useNavigate} from 'react-router'
-
-
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
@@ -12,6 +10,7 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
+import axios from 'axios';
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -50,62 +49,37 @@ const BootstrapDialogTitle = (props) => {
   );
 };
 
-let style = {
-  width : '55px',
-  height : '55px',
-  border : '1px solid lightgray',
-  borderRadius: '999px',
-  
-}
+
 
 
 
 const VehicleList = () => {
+    
 
-  const [Editname, setEditname] = React.useState("");
-  const [Editid, setEditid] = React.useState("");
+   
+      //api 
+    let url = 'https://we-fast-flyweis.herokuapp.com/vehicle-type/'
 
-
-  const updtedata = () => {
-    data[Editid].status = Editname;
-    setOpen(false);
-    setdata([... data])
-}
-
-
-        const[ data, setdata] = React.useState([
-          {
-            id : '1',
-            name : 'Eco',
-            loadWeight: '1000',
-            baseFare : '67',
-            pricePerKm: '60',
-            pricePerMin: '10'
-
-
-          },
-          {
-            id : '2',
-            name : 'Sports',
-            loadWeight: '999',
-            baseFare : '30',
-            pricePerKm: '100',
-            pricePerMin: '50'
-
-
-          },
-          {
-            id : '3',
-            name : 'Sports',
-            loadWeight: '956',
-            baseFare : '35',
-            pricePerKm: '100',
-            pricePerMin: '50'
-
-
-          },
+    const [users, setUsers] = useState([])
  
-        ])
+    const Vehcledata = async () =>{
+
+      try{
+        const data = await axios.get(url)
+        console.log(data.data.data.vehicleTypes)
+        setUsers(data.data.data.vehicleTypes)
+
+      }catch(e){
+        console.log(" error ::::",e)
+      }
+
+    }
+
+    useEffect(()=>{
+      Vehcledata()
+
+    },[])
+        
 
    
       const [open, setOpen] = React.useState(false);
@@ -127,33 +101,33 @@ const VehicleList = () => {
             {/* <------------header----------------> */}
       <thead class="thead-dark">
         <tr>
-          <th scope="col">#</th>
+          {/* <th scope="col">#</th> */}
           {/* <th scope="col">Images</th> */}
           
           <th scope="col">Name</th>
-          <th scope="col">loadWeight</th>
+          {/* <th scope="col">loadWeight</th>
           <th scope="col">baseFare</th>
           <th scope="col">pricePerKm</th>
-          <th scope="col">pricePerMin</th>
+          <th scope="col">pricePerMin</th> */}
           <th scope="col">Action</th>
         </tr>
       </thead>
 
       {/* <--------------Body-data------------> */}
       <tbody>
-        {data.map((item)=>(
+        {users.map((item)=>(
 
-        <tr key={item.id}>
-          <th scope="row">{item.id} </th>
+        <tr key={item._id}>
+          {/* <th scope="row">{item.id} </th> */}
           <td>{item.name}</td>
-          <td>{item.loadWeight}</td>
+          {/* <td>{item.loadWeight}</td>
           <td>{item.baseFare}</td>
           <td>{item.pricePerKm}</td>
-          <td>{item.pricePerMin} </td>
+          <td>{item.pricePerMin} </td> */}
           <td>
             <button onClick={handleClickOpen} style={{border: 'none', cursor : 'pointer',backgroundColor: '#10b0ef', color:'#fff' }}>View</button>
             <button onClick={()=>navigate('/edit-vehicletype',{state:item})} style={{margin : '0 10px',border: 'none', cursor : 'pointer',backgroundColor: '#54ef9c', color:'#fff' }}>Edit</button>
-            <button style={{border: 'none', cursor : 'pointer',backgroundColor: 'red', color:'#fff' }}>delete</button>
+            {/* <button style={{border: 'none', cursor : 'pointer',backgroundColor: 'red', color:'#fff' }}>delete</button> */}
           </td>
         </tr>
         ))}
@@ -171,6 +145,7 @@ const VehicleList = () => {
         <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
           Driver Details
         </BootstrapDialogTitle>
+        
         <DialogContent dividers>
           <Typography gutterBottom>
              <h6 style={{minWidth:'500px' , color: '#343232'}}>

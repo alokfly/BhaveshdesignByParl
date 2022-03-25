@@ -58,30 +58,46 @@ span{
 const AddGoods = () => {
     const navigate = useNavigate();
 
-   
+
+    // ---ApiCall
+
+    let token = (localStorage.getItem('token'));
+    let url = "https://we-fast-flyweis.herokuapp.com/goods-type"
+    
     const [name,setName] = useState ("");
+
     const [description,setdescription] =useState("")
+
+    let temp = {
+        description:description,
+        name:name,
+      
+    };
    
 
-    const handleAdd = () => {
-        try{
-        let url = "https://we-fast-flyweis.herokuapp.com/goods-type"
+    const handleAdd = (e)=>{
+       
+        setName('');
+        setdescription('');
+        const config = {
+             headers: {"Authorization" : `Bearer ${token}`} 
 
-        let temp = {
-            description:description,
-            name:name,
-          
-        };
+        }
 
-        axios
-        .post(url,temp)
-        .then(
-            (res) => {
-            console.log("data response::",res)
+        axios.post(url,temp,config).then(res=>{
+            console.log(res)
+        }).catch(err=>{
+            console.log(err);
         })
-        }catch (error) {}
+        alert('SUCCESS!! :-)\n\n' + JSON.stringify(temp, null));
+        return false;
 
+        
     }
+
+
+
+
 
   return (
     <>

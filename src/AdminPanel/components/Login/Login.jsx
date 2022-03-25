@@ -36,9 +36,9 @@ const Login = (props) => {
             }
 
             axios.post(url,temp).then((res)=>{
-                console.log('loginresponse:::',res);
-                navigate('/dashbord');
+                console.log('loginresponse:::',res);   
                 localStorage.setItem('token',res.data.data.loginToken);
+                navigate('/dashbord');
 
             })
           

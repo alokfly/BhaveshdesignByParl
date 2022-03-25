@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ContainerS } from '../../Common/CommonStyling'
 import HOC from '../../Common/HOC'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router'
+import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 const MainContainer = styled.div`
     width: 100%;
@@ -71,6 +73,60 @@ const GoodsList = styled.div`
 
 const GoodsType = () => {
 
+  const [data, setdata] = useState([])
+
+  const token = (localStorage.getItem('token'))
+  const Auth = {
+    headers: {"Authorization" : `Bearer ${token}` } 
+  }
+
+
+  //api integrations
+  // get data=====>
+  const url = 'https://we-fast-flyweis.herokuapp.com/goods-type'
+  const GoodsType = async ()=>{
+
+    try{
+
+      const data = await axios.get(url)
+      console.log('mydata:::--->',data.data.data.goodsTypes)
+      setdata(data.data.data.goodsTypes)
+
+    }catch(e){
+      console.log('LOL error---->',e)
+    }
+
+  }
+
+  //delete method =============>
+
+  const deleteItem = async (id) =>{
+    try{
+      const res = await axios.delete("https://we-fast-flyweis.herokuapp.com/goods-type/"+id,Auth)
+      console.warn("pp",res)
+      GoodsType()
+
+      }catch(e){
+
+      }  
+     
+  }
+  
+
+  useEffect(()=>{
+      window.scrollTo(0 ,0)
+      GoodsType()
+  },[])
+
+  //send data to edit
+  // const handleEdit = (item)=>{
+  //   console.log('mydata::::::::',(item))
+  
+
+  // }
+
+
+
   const navigate = useNavigate();
   return (
     <>
@@ -84,13 +140,18 @@ const GoodsType = () => {
             </span> 
             <button onClick={() => navigate("/add-goods")}>  Add Goods</button>
             </Header>
-            <GoodsList>
-              <h5><span>Name :</span><p>mechanical products</p></h5>
-              <h5><span>Description :</span><p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Impedit minima recusandae minus modi aspernatur maxime inventore amet ipsam quam distinctio non, possimus ducimus et dolorum saepe? Corporis fugiat dolores ratione!</p></h5>
+            {data.map(item=>(
+                <GoodsList key={item._id}>
+                <h5><span>Name :</span><p>{item.name}</p></h5>
+                <h5><span>Description :</span><p>{item.description} </p></h5>
+                
+                    <button onClick={()=>navigate('/edit-goods',{state:item})} >Edit</button>
+                             
+                  <button style={{backgroundColor: 'red'}} onClick={()=>deleteItem(item.id)}>Delete</button>     
+              </GoodsList>
 
-                <button onClick={()=>navigate('/edit-goods')}>Edit</button>
-                <button style={{backgroundColor: 'red'}}>Delete</button>     
-            </GoodsList>
+            ))}
+          
             </MainContainer>
         </ContainerS>
     </>
